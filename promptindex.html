@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Produtos Categorizados</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Arial, sans-serif; }
+        body { background-color: #f0f2f5; padding: 20px; }
+        
+        .main-title { text-align: center; color: #333; margin-bottom: 40px; text-transform: uppercase; }
+
+        /* Estilo dos Títulos das Categorias */
+        .category-header {
+            background: #ee4d2d;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 10px;
+            margin: 40px auto 20px;
+            max-width: 1200px;
+            font-size: 1.2rem;
+            text-transform: uppercase;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        .grid-container {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 25px;
+            max-width: 1200px;
+            margin: 0 auto 30px;
+        }
+
+        .card { 
+            background: white; 
+            border-radius: 20px; 
+            box-shadow: 0 10px 25px rgba(0,0,0,0.08); 
+            overflow: hidden; 
+            display: flex;
+            flex-direction: column;
+        }
+
+        .product-image { width: 100%; height: auto; display: block; border-bottom: 2px solid #f0f0f0; }
+        .content { padding: 20px; flex-grow: 1; }
+        
+        .btn-product { 
+            display: block; 
+            background: #ee4d2d; 
+            color: white; 
+            text-decoration: none; 
+            padding: 12px; 
+            border-radius: 10px; 
+            font-weight: bold; 
+            text-align: center; 
+            margin-bottom: 10px; 
+            transition: 0.3s;
+        }
+
+        .btn-video {
+            display: block;
+            background: #0088cc; /* Azul Telegram */
+            color: white;
+            text-decoration: none;
+            padding: 10px;
+            border-radius: 10px;
+            font-weight: bold;
+            text-align: center;
+            font-size: 0.9rem;
+            transition: 0.3s;
+        }
+        .btn-video:hover { background: #0077b5; }
+
+        @media (min-width: 600px) { .grid-container { grid-template-columns: repeat(2, 1fr); } }
+        @media (min-width: 1024px) { .grid-container { grid-template-columns: repeat(3, 1fr); } }
+    </style>
+</head>
+<body>
+
+    <h1 class="main-title">Escolha seu produto e baixe o vídeo</h1>
+
+    <div id="vitrine-categorias"></div>
+
+    <script>
+        const listaProdutos = [
+            {
+                categoria: "Cozinha",
+                nome: "Produto 1",
+                link: "https://s.shopee.com.br/9ztxLfsvuD",
+                foto: "https://down-br.img.susercontent.com/file/br-11134207-820l7-mm3i9thvammf96@resize_w450_nl.webp",
+                linkVideo: "https://t.me/meusvideosIA/5"
+            },
+            {
+                categoria: "Cozinha",
+                nome: "Produto 2",
+                link: "https://s.shopee.com.br/6fdVOZlPJR",
+                foto: "https://down-br.img.susercontent.com/file/br-11134207-7r98o-m5sq8of7kdj9b2@resize_w450_nl.webp",
+                linkVideo: "https://t.me/meusvideosIA/7"
+            },
+            {
+                categoria: "Cozinha",
+                nome: "Produto 3",
+                link: "https://s.shopee.com.br/6fdVPSskbc",
+                foto: "https://down-br.img.susercontent.com/file/br-11134207-7r98o-m40puqy992k5b8@resize_w450_nl.webp",
+                linkVideo: "https://t.me/meusvideosIA/8"
+            } , 
+  {
+                categoria: "Cozinha",
+                nome: "Produto 4",
+                link: "https://s.shopee.com.br/LjRt2ivkU",
+                foto: "https://down-br.img.susercontent.com/file/sg-11134201-7qvfm-lj2s2shmqq5z23@resize_w450_nl.webp",
+                linkVideo: "https://t.me/meusvideosIA/9"
+            } , 
+        {
+                categoria: "Cozinha",
+                nome: "Produto 5",
+                link: "https://s.shopee.com.br/6VK5GpKTxR",
+                foto: "https://down-br.img.susercontent.com/file/sg-11134201-825zk-mlaoagzsrchu3c@resize_w450_nl.webp",
+                linkVideo: "https://t.me/meusvideosIA/10"
+            } , 
+      {
+                categoria: "Cozinha",
+                nome: "Produto 6",
+                link: "https://s.shopee.com.br/4LFaiOl9Da",
+                foto: "https://down-br.img.susercontent.com/file/sg-11134201-7rav7-masavruc3y3mcb@resize_w450_nl.webp",
+                linkVideo: "https://t.me/meusvideosIA/11"
+            }
+
+            // Adicione quantos produtos quiser com a categoria que desejar
+        ];
+
+        const containerPai = document.getElementById('vitrine-categorias');
+
+        // 1. Identificar todas as categorias únicas
+        const categorias = [...new Set(listaProdutos.map(p => p.categoria))];
+
+        // 2. Criar as seções para cada categoria
+        categorias.forEach(cat => {
+            // Criar título da categoria
+            const header = document.createElement('div');
+            header.className = 'category-header';
+            header.innerText = cat;
+            containerPai.appendChild(header);
+
+            // Criar o grid para os produtos desta categoria
+            const grid = document.createElement('section');
+            grid.className = 'grid-container';
+            
+            // Filtrar produtos que pertencem a esta categoria
+            const produtosDaCategoria = listaProdutos.filter(p => p.categoria === cat);
+
+            produtosDaCategoria.forEach(prod => {
+                const cardHTML = `
+                    <div class="card">
+                        <a href="${prod.link}" target="_blank">
+                            <img src="${prod.foto}" alt="${prod.nome}" class="product-image">
+                        </a>
+                        <div class="content">
+                            <a href="${prod.link}" target="_blank" class="btn-product">🛒 POSTAR NA SHOPEE</a>
+                            <a href="${prod.linkVideo}" target="_blank" class="btn-video">✈️ BAIXAR VÍDEO NO TELEGRAM</a>
+                        </div>
+                    </div>
+                `;
+                grid.innerHTML += cardHTML;
+            });
+
+            containerPai.appendChild(grid);
+        });
+    </script>
+
+</body>
+</html>
